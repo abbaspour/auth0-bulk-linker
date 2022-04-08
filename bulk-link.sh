@@ -60,7 +60,7 @@ function link() {
     local -r BODY=$(printf '{"provider":"%s","user_id":"%s"}'  "${secondary_userId[0]}" "${secondary_userId[1]}")
 
     #echo $BODY
-    curl --request POST \
+    curl -s --request POST \
       -H "Authorization: Bearer ${access_token}" \
       --url "${AUTH0_DOMAIN_URL}api/v2/users/${primary_userId}/identities" \
       --header 'content-type: application/json' \
@@ -71,4 +71,4 @@ function link() {
 export -f link
 export access_token
 
-parallel -0 -j${job_max} link {} < "${input_file}"
+cat "${input_file}" | parallel -j${job_max} link {}
